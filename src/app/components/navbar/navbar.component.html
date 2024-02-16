@@ -1,18 +1,18 @@
 <div class="bg-[#2C2A2A] h-[3rem] flex justify-center items-center">
     <div class="max-w-[64rem] w-[64rem] h-full flex flex-row gap-x-6 py-1">
-        <div class="h-full flex items-center">
+        <div class="h-full flex items-center cursor-pointer" (click)="onGoHome()">
             <span class="text-white text-lg font-bold prompt-regular">SearchMovie</span>
         </div>
         <div class="bg-white w-full rounded-md flex flex-row">
             <div class="max-w-[8rem] w-full h-ful mx-1">
-                <select class="w-full h-full px-4 outline-none prompt-regular" value="title">
-                    <option value="title">Title</option>
-                    <option value="imdbid">ImdbId</option>
-                    <option value="partial_title">Partial Title</option>
+                <select class="w-full h-full px-4 outline-none prompt-regular text-black" [value]="searchType">
+                    <option name="title" value="title">Title</option>
+                    <option name="imdbid" value="imdbid">ImdbId</option>
+                    <option name="partial_title" value="partial_title">Partial Title</option>
                 </select>
             </div>
             <div class="max-w-[45rem] w-full h-full rounded-l-md">
-                <input placeholder="Searching..." class="w-ful h-full w-[40rem] outline-none px-8" type="text" />
+                <input [(ngModel)]="searchTerm" placeholder="Searching..." class="w-ful h-full w-[40rem] outline-none px-8" type="text" />
             </div>
             <div (click)="onSearch()" class="max-w-[3.2rem] w-full prompt-regular bg-[#3490dc] flex justify-center items-center rounded-r-md cursor-pointer hover:bg-[#518ec0] transition-all duration-300 " >
                 <svg 

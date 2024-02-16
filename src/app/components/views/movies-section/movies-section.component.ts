@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MovieCardComponent } from '../../cards/movie-card/movie-card.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Search } from '../../../services/api/omdbapi.service';
 @Component({
   selector: 'app-movies-section',
   standalone: true,
-  imports: [MovieCardComponent , NgxPaginationModule , CommonModule , FormsModule],
+  imports: [MovieCardComponent , NgxPaginationModule , CommonModule],
   templateUrl: './movies-section.component.html',
   styleUrl: './movies-section.component.scss'
 })
 export class MoviesSectionComponent {
+
+
+  @Input() movies: Search[] = [];
   
-  public tags = ["movie" , "2022"];
-  totalMovies = 100;
+  totalMovies = this.movies.length;
   currentPage = 1;
 
   pageChanged(event: any): void {

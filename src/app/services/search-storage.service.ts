@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-interface Search {
+export interface Search {
   searchText: string | null;
   searchType: string | null;
 }

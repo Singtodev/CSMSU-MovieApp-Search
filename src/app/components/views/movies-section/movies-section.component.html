@@ -1,21 +1,21 @@
-<div class="max-w-[64rem] w-full my-3 mx-auto min-h-screen">
-  <div class="w-full min-h-[45rem] h-full grid grid-cols-5 gap-3">
+<div *ngIf="movies.length > 0" class="max-w-[64rem] w-full my-6 mx-auto min-h-screen">
+  <div class="w-full min-h-[64rem] h-full grid grid-cols-5 gap-3">
     <div
       *ngFor="
-        let movie of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        let movie of movies
           | paginate
             : {
                 itemsPerPage: 10,
                 currentPage: currentPage,
-                totalItems: 10
+                totalItems: totalMovies
               }
       "
     >
       <app-movie-card
-        imdbId="1"
-        movieTitle="Spider-Man: Into the Spider-Verse"
-        moviePicture="https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_SX300.jpg"
-        [tags]="tags"
+        imdbId="{{movie.imdbID}}"
+        movieTitle="{{movie.Title}}"
+        moviePicture="{{movie.Poster}}"
+        [tags]="[movie.Type , movie.Year]"
       />
     </div>
   </div>
@@ -31,4 +31,7 @@
       [responsive]="true"
     ></pagination-controls>
   </div>
+</div>
+<div *ngIf="movies.length == 0" class="min-h-[50rem] flex justify-center items-center">
+      <div class="text-white">ไม่พบข้อมูลการค้นหา</div>
 </div>

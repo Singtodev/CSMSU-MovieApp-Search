@@ -1,5 +1,5 @@
-<div class="min-h-screen bg-[#000] tex-white">
-    <app-navbar/>
-    <app-movies-section />
+<div class="min-h-screen bg-[#000]">
+    <app-navbar (onClickSearch)="searchMovie()"/>
+    <app-movies-section [movies]="searchAll" onClickSearch="searchMovie()" />
     <app-footer />
 </div>

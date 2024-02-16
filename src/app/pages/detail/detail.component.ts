@@ -9,5 +9,8 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
   styleUrl: './detail.component.scss'
 })
 export class DetailComponent {
+  
+  onSearch(): void{
 
+  }
 }
