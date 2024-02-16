@@ -45,13 +45,13 @@ export class OmdbapiService {
 
   public cache: Map<string, Search[]> = new Map();
 
-  getCache(){
+  getCache() {
     return this.cache;
   }
 
   searchMovies(search: SearchInput): Observable<any[]> {
     // Check if the search text is empty or undefined
-    if (!search.searchText) {
+    if (!search.searchText || !search.searchType) {
       return of([]); // Return an empty observable if there's no search text
     }
 
@@ -64,9 +64,14 @@ export class OmdbapiService {
     }
 
     // If the results are not cached, fetch them from the API
-    return this.fetchResults(search.searchText).pipe(
+    return this.fetchResults(search.searchText, search.searchType).pipe(
       map((data: any) => {
-        const results = data.Search || []; // Extract the 'Search' array from the API response
+        let results: any = [];
+        if (search.searchType == 'i' || search.searchType == 't') {
+          results = [data];
+        } else {
+          results = data.Search || []; // Extract the 'Search' array from the API response
+        }
         this.cache.set(cacheKey, results); // Cache the results for future use
         return results; // Return the results
       }),
@@ -77,11 +82,13 @@ export class OmdbapiService {
     );
   }
 
-  private fetchResults(searchText: string): Observable<any> {
-    const url = `${config.API_PATH}/?s=${searchText}&apikey=${config.API_KEY}`;
+  private fetchResults(
+    searchText: string,
+    searchType: string
+  ): Observable<any> {
+    const url = `${config.API_PATH}/?${searchType}=${searchText}&apikey=${config.API_KEY}`;
     return this.http.get(url);
   }
-
 
   public getAllMovies(): Observable<Search[]> {
     let listSearch: string[] = [

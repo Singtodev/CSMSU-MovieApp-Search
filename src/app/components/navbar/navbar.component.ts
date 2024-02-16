@@ -17,7 +17,7 @@ export class NavbarComponent {
   constructor(private router: Router, private st: SearchStorageService) {}
 
   public searchTerm = '';
-  public searchType = 'title';
+  public searchType = 't';
 
   public onSearch() {
     // go to home page
@@ -28,6 +28,8 @@ export class NavbarComponent {
       searchText: this.searchTerm,
       searchType: this.searchType,
     });
+
+    console.log(this.st.getSearch());
 
     this.onClickSearch.emit();
   }

@@ -51,7 +51,6 @@ export class MainComponent implements OnInit {
   }
 
   searchMovie() {
-    console.log(this.os.getCache())
     let search: SearchInput = this.st.getSearch();
     if (search.searchText == '') {
       this.getMovies();
