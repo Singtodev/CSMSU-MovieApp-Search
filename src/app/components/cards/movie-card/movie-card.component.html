@@ -1,0 +1,48 @@
+<div class="w-full h-[28rem] bg-[#18181B] group">
+  <div class="w-full h-[60%] bg-gray-300 overflow-hidden">
+    <img
+      class="w-full h-full bg-cover object-cover group-hover:scale-110 transition-all duration-300"
+      [src]="moviePicture"
+    />
+  </div>
+  <div class="p-3 h-[3rem]">
+    <div class="text-white text-sm h-[4rem]">
+      {{
+        movieTitle.length > 50 ? movieTitle.slice(0, 50) + "..." : movieTitle
+      }}
+    </div>
+    <div class="text-white flex flex-row gap-1">
+      <div
+        *ngFor="let item of tags"
+        class="border inline-block px-1 text-xs px-2 border-white rounded-xl"
+      >
+        {{ item }}
+      </div>
+    </div>
+    <button
+      (click)="goToDetail()"
+      class="bg-[#404040] hover:bg-[#282727] transition-all duration-300 ease-in-out text-white w-full mt-6 py-1 rounded-md flex flex-row justify-center items-center gap-2"
+    >
+      <svg
+        fill="#fff"
+        class="w-3 h-3"
+        version="1.1"
+        id="Layer_1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 0 512.055 512.055"
+        xml:space="preserve"
+      >
+        <g>
+          <g>
+            <path
+              d="M500.235,236.946L30.901,2.28C16.717-4.813,0.028,5.502,0.028,21.361v469.333c0,15.859,16.689,26.173,30.874,19.081
+			l469.333-234.667C515.958,267.247,515.958,244.808,500.235,236.946z M42.694,456.176V55.879l400.297,200.149L42.694,456.176z"
+            />
+          </g>
+        </g>
+      </svg>
+      Tailer
+    </button>
+  </div>
+</div>

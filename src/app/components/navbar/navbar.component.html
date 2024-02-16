@@ -1,0 +1,28 @@
+<div class="bg-[#2C2A2A] h-[3rem] flex justify-center items-center">
+    <div class="max-w-[64rem] w-[64rem] h-full flex flex-row gap-x-6 py-1">
+        <div class="h-full flex items-center">
+            <span class="text-white text-lg font-bold prompt-regular">SearchMovie</span>
+        </div>
+        <div class="bg-white w-full rounded-md flex flex-row">
+            <div class="max-w-[8rem] w-full h-ful mx-1">
+                <select class="w-full h-full px-4 outline-none prompt-regular" value="title">
+                    <option value="title">Title</option>
+                    <option value="imdbid">ImdbId</option>
+                    <option value="partial_title">Partial Title</option>
+                </select>
+            </div>
+            <div class="max-w-[45rem] w-full h-full rounded-l-md">
+                <input placeholder="Searching..." class="w-ful h-full w-[40rem] outline-none px-8" type="text" />
+            </div>
+            <div (click)="onSearch()" class="max-w-[3.2rem] w-full prompt-regular bg-[#3490dc] flex justify-center items-center rounded-r-md cursor-pointer hover:bg-[#518ec0] transition-all duration-300 " >
+                <svg 
+                    fill="#fff"
+                    xmlns="http://www.w3.org/2000/svg" 
+                     viewBox="0 0 50 50"
+                    class="w-6 h-6 text-white">
+                    <path class="text-white" d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div> 

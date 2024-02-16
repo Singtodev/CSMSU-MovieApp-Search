@@ -1,0 +1,34 @@
+<div class="max-w-[64rem] w-full my-3 mx-auto min-h-screen">
+  <div class="w-full min-h-[45rem] h-full grid grid-cols-5 gap-3">
+    <div
+      *ngFor="
+        let movie of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          | paginate
+            : {
+                itemsPerPage: 10,
+                currentPage: currentPage,
+                totalItems: 10
+              }
+      "
+    >
+      <app-movie-card
+        imdbId="1"
+        movieTitle="Spider-Man: Into the Spider-Verse"
+        moviePicture="https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_SX300.jpg"
+        [tags]="tags"
+      />
+    </div>
+  </div>
+
+  <div
+    class="flex flex-row justify-center items-center bg-[#18181B] text-black my-2"
+  >
+    <pagination-controls
+      class="mt-3 my-pagination"
+      (pageChange)="pageChanged($event)"
+      [maxSize]="5"
+      [directionLinks]="true"
+      [responsive]="true"
+    ></pagination-controls>
+  </div>
+</div>
