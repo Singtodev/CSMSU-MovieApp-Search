@@ -15,9 +15,8 @@ export class MoviesSectionComponent {
 
 
   @Input() movies: Search[] = [];
-  
-  totalMovies = this.movies.length;
-  currentPage = 1;
+  @Input() currentPage: number = 1;
+  public totalMovies = this.movies.length;
 
   pageChanged(event: any): void {
     this.currentPage = event;

@@ -8,6 +8,7 @@ import {
   forkJoin,
   map,
   of,
+  tap,
 } from 'rxjs';
 import { config } from '../../config/config';
 import {
@@ -44,55 +45,79 @@ export class OmdbapiService {
   public searchedMoviesResult: Search[] = [];
 
   public cache: Map<string, Search[]> = new Map();
-
   getCache() {
     return this.cache;
   }
 
   searchMovies(search: SearchInput): Observable<any[]> {
-    // Check if the search text is empty or undefined
+    // fetch api 3 case
+    // by title  , imdbid , partial title
+
+    let url = `${config.API_PATH}/?${search.searchType}=${search.searchText}&apikey=${config.API_KEY}`;
+
     if (!search.searchText || !search.searchType) {
-      return of([]); // Return an empty observable if there's no search text
+      return of([]);
     }
 
-    const cacheKey = search.searchText.toLowerCase(); // Normalize the search text for consistency
-
-    // Check if the results for the search text are already cached
-    if (this.cache.has(cacheKey)) {
-      console.log('Using cached results for:', search.searchText);
-      return of(this.cache.get(cacheKey)!); // Return the cached results as an observable
-    }
-
-    // If the results are not cached, fetch them from the API
-    return this.fetchResults(search.searchText, search.searchType).pipe(
+    return this.http.get(url).pipe(
       map((data: any) => {
+
         let results: any = [];
-        if (search.searchType == 'i' || search.searchType == 't') {
+
+        if(data.Response == "False"){
+          alert(data.Error);
+          return [];
+        }
+        
+        if (search.searchType == 't' || search.searchType == 'i') {
           results = [data];
         } else {
-          results = data.Search || []; // Extract the 'Search' array from the API response
+          results = data.Search || [];
         }
-        this.cache.set(cacheKey, results); // Cache the results for future use
-        return results; // Return the results
+
+        return results;
       }),
       catchError((error) => {
-        console.error('Error fetching search results:', error);
+        console.log(error);
         return of([]); // Return an empty array in case of an error
       })
     );
   }
 
-  private fetchResults(
-    searchText: string,
-    searchType: string
-  ): Observable<any> {
-    const url = `${config.API_PATH}/?${searchType}=${searchText}&apikey=${config.API_KEY}`;
-    return this.http.get(url);
+  async getSearchPartial(search: SearchInput): Promise<Search[]> {
+    let page = 1;
+    let pagination = 0;
+    let results: any[] = [];
+    if (!search.searchText || !search.searchType) {
+      return [];
+    }
+    let url = `${config.API_PATH}/?${search.searchType}=${search.searchText}&apikey=${config.API_KEY}&page=${page}`;
+    try {
+      const initialResponse: any = await this.http.get(url).toPromise();
+      if (initialResponse.Response === "True") {
+        console.log(initialResponse);
+        pagination = Math.floor(initialResponse.totalResults / 10) - 1;
+        console.log(pagination);
+        results = [...initialResponse.Search];
+        while (pagination > 0) {
+          page++;
+          pagination--;
+          let nextUrl = `${config.API_PATH}/?${search.searchType}=${search.searchText}&apikey=${config.API_KEY}&page=${page}`;
+          const nextPageResponse: any = await this.http.get(nextUrl).toPromise();
+          results = [...results ,...nextPageResponse.Search]
+        }
+      }else{
+        alert(initialResponse.Error);
+      }
+      return results || [];
+    } catch (error) {
+      return [];
+    }
   }
-
+  
   public getAllMovies(): Observable<Search[]> {
     let listSearch: string[] = [
-      'Spider-Man',
+      'The Matrix',
       'Disney',
       'Superman',
       'TheFlash',
@@ -102,6 +127,7 @@ export class OmdbapiService {
       'Love',
       'Thor: Love and Thunder',
       'Black Adam',
+      'Spider-Man',
       'Top Gun: Maverick',
       'The Batman',
       'Encanto',
@@ -110,21 +136,17 @@ export class OmdbapiService {
       'K.G.F: Chapter 2',
       'Uncharted',
     ];
-
     const requests: Observable<Search[]>[] = listSearch.map((searchText) => {
       if (this.cache.has(searchText)) {
-        // If data is cached, return it as an observable
         return of(this.cache.get(searchText)!);
       } else {
-        // Otherwise, fetch data from the API
         const url = `${config.API_PATH}?s=${searchText}&apikey=${config.API_KEY}`;
         return this.http.get<SearchResponse>(url).pipe(
           catchError((error) => {
             console.error(`Error fetching movies for ${searchText}:`, error);
-            // Return an empty array in case of an error
             return of([]);
           }),
-          map((response: any) => response.Search || []), // Extract the 'Search' array from the response
+          map((response: any) => response.Search || []),
           // Cache the response
           map((searchResults) => {
             this.cache.set(searchText, searchResults);
@@ -134,10 +156,9 @@ export class OmdbapiService {
         );
       }
     });
-
-    // Combine all observables into a single observable and concatenate their results
     return forkJoin(requests).pipe(
-      map((results: any) => [].concat(...results)) // Flatten the array of arrays into a single array
+      map((results: any) => [].concat(...results))
     );
   }
+  
 }

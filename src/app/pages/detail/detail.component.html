@@ -1,3 +1,55 @@
-<div class="min-h-screen bg-[#000] tex-white">
-    <app-navbar (onClickSearch)="onSearch()"/>
-</div>
+<div class="min-h-screen bg-[#000] tex-white relative">
+    <div *ngIf="!searchResponse" class="fixed w-full h-full bg-black bg-opacity-70 text-white text-center flex justify-center items-center">
+        <p>Loading...</p>
+      </div>
+    <app-navbar/>
+    <div *ngIf="searchResponse" class="max-w-[64rem] mx-auto h-screen py-4">
+            <div (click)="back()" class="text-yellow-400 text-3xl font-prompt pb-6 cursor-pointer ">Back</div>
+            <div class="grid grid-cols-3">
+                <div class="col-span-1 h-[40rem] rounded-xl">
+                    <img [src]="movie.Poster" class="w-full h-full object-cover bg-cover bg-center rounded-xl" />
+                </div>
+                <div class="col-span-2 flex flex-col px-10 text-white ">
+                    <div class="text-2xl">{{movie.Title}}</div>
+                    <div class="grid grid-cols-2 py-2">
+                        <div>Rated: {{movie.Rated}}</div>
+                        <div>Runtime: {{movie.Runtime}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>Genre: {{movie.Genre}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>Plot: {{movie.Plot}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div class="text-2xl">Ratings</div>
+                        <div *ngFor="let rate of movie.Ratings" class="grid grid-cols-1">{{rate.Source}}  : {{rate.Value}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>Country: {{movie.Country || ''}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>Language: {{movie.Language || ''}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>Awards: {{movie.Awards || ''}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>ImdbRating: {{movie.imdbRating || ''}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>ImdbId: {{movie.imdbID || ''}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>BoxOffice: {{movie.BoxOffice || ''}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>Production: {{movie.Production || ''}}</div>
+                    </div>
+                    <div class="grid grid-cols-1 py-2">
+                        <div>Website: {{movie.Website || ''}}</div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>  

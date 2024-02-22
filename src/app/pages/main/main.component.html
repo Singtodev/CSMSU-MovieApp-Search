@@ -1,5 +1,18 @@
-<div class="min-h-screen bg-[#000]">
-    <app-navbar (onClickSearch)="searchMovie()"/>
-    <app-movies-section [movies]="searchAll" onClickSearch="searchMovie()" />
-    <app-footer />
+<div class="min-h-screen bg-[#000] relative">
+  <div
+    *ngIf="!searchResponse"
+    class="fixed w-full h-full bg-black bg-opacity-70 text-white text-center flex justify-center items-center"
+  >
+    <p>Loading...</p>
+  </div>
+  <app-navbar (onClickSearch)="searchMovie()" onGetAllMovies="getMovies()" />
+  <div class="min-h-screen">
+    <app-movies-section
+      *ngIf="searchResponse"
+      [movies]="searchAll"
+      onClickSearch="searchMovie()"
+      [currentPage]="currentPage"
+    />
+  </div>
+  <app-footer />
 </div>

@@ -12,8 +12,8 @@ export class SearchStorageService {
   constructor() {}
 
   public search: Search = {
-    searchText: null,
-    searchType: null,
+    searchText: '',
+    searchType: 's',
   };
 
   public setSearch(options: Search) {

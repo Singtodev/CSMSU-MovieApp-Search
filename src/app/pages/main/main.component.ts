@@ -12,6 +12,8 @@ import {
   Search as SearchInput,
 } from '../../services/search-storage.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -21,25 +23,27 @@ import { HttpClientModule } from '@angular/common/http';
     MoviesSectionComponent,
     FooterComponent,
     HttpClientModule,
+    CommonModule,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
 export class MainComponent implements OnInit {
   public searchAll: Search[] = [];
-  public searchResponse: boolean = false;
-
+  public searchResponse: boolean = true;
+  public currentPage = 1;
   constructor(private st: SearchStorageService, private os: OmdbapiService) {}
 
   ngOnInit(): void {
     if (this.st.isValidSearch()) {
-      console.log('Go Calling api!');
+      this.searchMovie();
     } else {
       this.getMovies();
     }
   }
 
   getMovies(): void {
+    this.currentPage = 1;
     this.os.getAllMovies().subscribe(
       (movies: Search[]) => {
         this.searchAll = movies;
@@ -50,14 +54,27 @@ export class MainComponent implements OnInit {
     );
   }
 
-  searchMovie() {
+  async searchMovie() {
+    this.currentPage = 1;
     let search: SearchInput = this.st.getSearch();
     if (search.searchText == '') {
       this.getMovies();
     } else {
-      this.os.searchMovies(search).subscribe((data: Search[]) => {
-        this.searchAll = data;
-      });
+      this.searchResponse = false;
+
+      if (search.searchType == 't' || search.searchType == 'i') {
+        this.os.searchMovies(search).subscribe((data: Search[]) => {
+          // Handle the data here
+          console.log(data);
+          this.searchAll = data;
+          setTimeout(() => {
+            this.searchResponse = true;
+          }, 1000);
+        });
+      } else {
+        this.searchAll = await this.os.getSearchPartial(search);
+        this.searchResponse = true;
+      }
     }
   }
 }
